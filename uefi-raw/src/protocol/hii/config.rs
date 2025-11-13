@@ -4,9 +4,10 @@
 
 use core::fmt::Debug;
 
-use super::{FormId, QuestionId, StringId};
+use super::QuestionId;
 use crate::protocol::device_path::DevicePathProtocol;
-use crate::{Boolean, Char16, Guid, Status, guid, newtype_enum};
+use crate::protocol::hii::ifr::IfrTypeValue;
+use crate::{Char16, Guid, Status, guid, newtype_enum};
 
 /// EFI_CONFIG_KEYWORD_HANDLER_PROTOCOL
 #[derive(Debug)]
@@ -95,50 +96,6 @@ newtype_enum! {
         RECONNECT = 8,
         /// The Forms Browser will write the current modified question value on the selected form to storage.
         QUESTION_APPLY = 9,
-    }
-}
-
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct HiiTime {
-    pub hour: u8,
-    pub minute: u8,
-    pub second: u8,
-}
-
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct HiiDate {
-    pub year: u16,
-    pub month: u8,
-    pub day: u8,
-}
-
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct HiiRef {
-    pub question_id: QuestionId,
-    pub form_id: FormId,
-    pub guid: Guid,
-    pub string_id: StringId,
-}
-
-#[repr(C)]
-#[derive(Copy, Clone)]
-pub union IfrTypeValue {
-    pub u8: u8,           // EFI_IFR_TYPE_NUM_SIZE_8
-    pub u16: u16,         // EFI_IFR_TYPE_NUM_SIZE_16
-    pub u32: u32,         // EFI_IFR_TYPE_NUM_SIZE_32
-    pub u64: u64,         // EFI_IFR_TYPE_NUM_SIZE_64
-    pub b: Boolean,       // EFI_IFR_TYPE_BOOLEAN
-    pub time: HiiTime,    // EFI_IFR_TYPE_TIME
-    pub date: HiiDate,    // EFI_IFR_TYPE_DATE
-    pub string: StringId, // EFI_IFR_TYPE_STRING, EFI_IFR_TYPE_ACTION
-    pub hii_ref: HiiRef,  // EFI_IFR_TYPE_REF
-}
-impl core::fmt::Debug for IfrTypeValue {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        f.debug_struct("EfiIfrTypeValue").finish()
     }
 }
 
