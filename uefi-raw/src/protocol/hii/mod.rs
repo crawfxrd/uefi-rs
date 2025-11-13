@@ -6,6 +6,7 @@ pub mod config;
 pub mod database;
 pub mod font;
 pub mod form_browser;
+pub mod ifr;
 pub mod image;
 pub mod popup;
 pub mod string;
@@ -20,6 +21,7 @@ pub type StringId = u16;
 pub type FormId = u16;
 pub type VarstoreId = u16;
 pub type AnimationId = u16;
+pub type DefaultId = u16;
 
 /// EFI_HII_PACKAGE_HEADER
 #[derive(Debug)]
@@ -218,4 +220,40 @@ pub struct KeyDescriptor {
     pub shifted_alt_gr_unicode: Char16,
     pub modifier: u16,
     pub affected_attribute: u16,
+}
+
+/// EFI_HII_TIME
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct HiiTime {
+    pub hour: u8,
+    pub minute: u8,
+    pub second: u8,
+}
+
+/// EFI_HII_DATE
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct HiiDate {
+    pub year: u16,
+    pub month: u8,
+    pub day: u8,
+}
+
+/// EFI_HII_REF
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct HiiRef {
+    pub question_id: QuestionId,
+    pub form_id: FormId,
+    pub formset_guid: Guid,
+    pub device_path: StringId,
+}
+
+/// EFI_HII_FORM_PACKAGE_HDR
+#[derive(Debug)]
+#[repr(C)]
+pub struct HiiFormPackageHdr {
+    // NOTE: UEFI spec incorrectly declares this a pointer.
+    pub header: HiiPackageHeader,
 }
